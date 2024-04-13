@@ -11,41 +11,39 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PositiveTest {
-private WebDriver driver;
-
-@BeforeAll
-public static void setupAll() {
-WebDriverManager.chromedriver().setup();
-}
- @BeforeEach
-         void setUp() {
-  ChromeOptions options = new ChromeOptions();
-  options.addArguments("--disable-dev-shm-usage");
-  options.addArguments("--no-sandbox");
-  options.addArguments("--headless");
-  driver = new ChromeDriver(options);
-  driver.get ("http://localhost:9999");
- }
- @AfterEach
- void tearmDown(){
-  driver.quit();
-  driver=null;
- }
-@Test
-void successfulSubmissionOfApplication() throws InterruptedException {
- WebElement form = driver.findElement( By.cssSelector("[data-test-id=callback-form]"));
- form.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Марина");
- form.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79256337459");
- form.findElement(By.cssSelector("[data-test-id=agreement")).click();
- form.findElement(By.cssSelector("[role=button]")).click();
- String text = driver.findElement(By.className("alert-success")).getText();
- assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.",  text.trim());
+public class PositiveTest {
+    private WebDriver driver;
 
 
- Thread.sleep(5000);
-}
+    @BeforeEach
+    void setUp() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
+        driver.get("http://localhost:9999");
+    }
 
+    @AfterEach
+    void tearDown() {
+        driver.quit();
+        driver = null;
+    }
+
+    @Test
+    void successfulSubmissionOfApplication() throws InterruptedException {
+
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Марина Петрова");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79256337459");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='order-success']")).getText();
+        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text.trim());
+
+
+        Thread.sleep(5000);
+    }
 
 
 }
